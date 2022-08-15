@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Masuk</string>
+    <string name="logout">Keluar</string>
+    <string name="register">Daftar</string>
+
+    <string name="name">Nama</string>
+    <string name="email">Email</string>
+    <string name="password">Kata Sandi</string>
+
+    <string name="login_form_error">Mohon isi email, dan kata sandi sesuai ketentuan</string>
+    <string name="register_form_error">Mohon isi nama, email, dan kata sandi sesuai ketentuan</string>
+    <string name="invalid_name">Nama tidak boleh kosong</string>
+    <string name="invalid_email">Email tidak valid</string>
+    <string name="invalid_password">Kata Sandi harus minimal 6 karakter</string>
+
+    <string name="login_success">Masuk Berhasil</string>
+    <string name="login_error">Terjadi Kesalahan saat Masuk. Silahkan coba lagi</string>
+    <string name="logout_success">Berhasil Keluar</string>
+    <string name="register_success">Pendaftaran Berhasil</string>
+
+    <string name="created_at_format">Dibuat pada : %s</string>
+    <string name="location_format">Lokasi : %s</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galeri</string>
+    <string name="clear">Hapus</string>
+    <string name="description">Deskripsi</string>
+    <string name="submit">Kirim</string>
+    <string name="create_story">Buat Cerita</string>
+    <string name="data_invalid">Data Tidak Valid</string>
+    <string name="camera_granted">Perizinan Kamera telah diberikan. Anda dapat mengunggah cerita</string>
+    <string name="camera_not_granted">Perizinan Kamera diperlukan untuk mengakses kamera</string>
+    <string name="choose_picture">Pilih Gambar</string>
+    <string name="preview_picture">Gambar Pratinjau</string>
+    <string name="detail_picture">Gambar Detail</string>
+    <string name="maps">Peta</string>
+    <string name="stories">Cerita</string>
+    <string name="refresh_maps">Muat Ulang Peta</string>
+    <string name="get_location">Dapatkan Lokasi</string>
+    <string name="location_not_found">Lokasi tidak ditemukan. Silahkan coba kembali</string>
+    <string name="location_permission_not_granted">Lokasi tidak dapat diperoleh karena izin lokasi tidak diberikan</string>
+    <string name="location_permission_note">Untuk memperoleh lokasi, anda perlu memberi izin lokasi akurat</string>
+    <string name="no_location">Lokasi tidak ditemukan</string>
+    <string name="paging_error">Kesalahan saat mengambil data. Silahkan coba lagi</string>
+</resources>

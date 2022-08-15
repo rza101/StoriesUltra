@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name" translatable="false">Stories Ultra</string>
+
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="register">Register</string>
+
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <string name="login_form_error">Please fill the email and password as specified</string>
+    <string name="register_form_error">Please fill the name, email, and password as specified</string>
+    <string name="invalid_name">Name must not be empty</string>
+    <string name="invalid_email">Email is not valid</string>
+    <string name="invalid_password">Password must be at least 6 characters</string>
+
+    <string name="login_success">Login Success</string>
+    <string name="login_error">Login Error. Please try again</string>
+    <string name="logout_success">Logout Success</string>
+    <string name="register_success">Register Success</string>
+
+    <string name="created_at_format">Created At : %s</string>
+    <string name="location_format">Location : %s</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="clear">Clear</string>
+    <string name="description">Description</string>
+    <string name="submit">Submit</string>
+    <string name="create_story">Create Story</string>
+    <string name="data_invalid">Data Invalid</string>
+    <string name="camera_granted">Camera Permision has been granted. You able to upload story</string>
+    <string name="camera_not_granted">Camera Permission is needed to use camera</string>
+    <string name="choose_picture">Choose a Picture</string>
+
+    <string name="transition_detail_photo" translatable="false">transition_detail_photo</string>
+    <string name="transition_detail_name" translatable="false">transition_detail_name</string>
+    <string name="transition_detail_created_at" translatable="false">transition_detail_created_at</string>
+    <string name="preview_picture">Preview Picture</string>
+    <string name="detail_picture">Detail Picture</string>
+
+    <string name="maps">Maps</string>
+    <string name="stories">Stories</string>
+
+    <string name="refresh_maps">Refresh Maps</string>
+    <string name="get_location">Get Location</string>
+
+    <string name="coordinate_format" translatable="false">%.5f, %,5f</string>
+    <string name="location_not_found">Location not found. Please try again</string>
+    <string name="location_permission_not_granted">Current location cannot be retrieved without location permission</string>
+    <string name="location_permission_note">To get current location, you must grant precise location permission</string>
+    <string name="no_location">No location</string>
+    <string name="paging_error">Error when fetching data. Please try again</string>
+</resources>

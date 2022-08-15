@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/main_bottom_nav_stories">
+
+    <fragment
+        android:id="@+id/main_bottom_nav_stories"
+        android:name="com.rhezarijaya.storiesultra.ui.activity.main.fragment.MainStoriesFragment"
+        android:label="fragment_main_stories"
+        tools:layout="@layout/fragment_main_stories" />
+
+    <fragment
+        android:id="@+id/main_bottom_nav_maps"
+        android:name="com.rhezarijaya.storiesultra.ui.activity.main.fragment.MainMapsFragment"
+        android:label="fragment_main_maps"
+        tools:layout="@layout/fragment_main_maps" />
+</navigation>

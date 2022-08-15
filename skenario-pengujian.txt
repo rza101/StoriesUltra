@@ -1,0 +1,13 @@
+Skenario Testing Aplikasi Stories Ultra
+1.  CreateStoryViewModel
+    a.  Ketika melakukan submit:
+        - Memastikan isLoading bernilai true
+    b.  Ketika sukses submit:
+        - Memastikan isLoading bernilai false
+        - Memastikan createError bernilai null
+    c.  Ketika gagal submit:
+        - Memastikan isLoading bernilai true
+        - Memastikan createError tidak bernilai null
+2.  LoginViewModel
+3.  MainViewModel
+4.  RegisterViewModel

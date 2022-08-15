@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main_bottom_nav_stories"
+        android:title="@string/stories"
+        android:icon="@drawable/ic_baseline_auto_stories_24" />
+    <item
+        android:id="@+id/main_bottom_nav_maps"
+        android:title="@string/maps"
+        android:icon="@drawable/ic_baseline_map_24"/>
+</menu>
