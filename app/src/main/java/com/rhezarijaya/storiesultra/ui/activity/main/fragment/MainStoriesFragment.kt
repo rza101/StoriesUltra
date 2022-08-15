@@ -124,8 +124,9 @@ class MainStoriesFragment : Fragment() {
             }
         }
 
-        mainViewModel.getMainStoriesData().observe(requireActivity()) { storyPagingData ->
+        mainViewModel.getMainStories().observe(requireActivity()) { storyPagingData ->
             storyListAdapter.submitData(lifecycle, storyPagingData)
+            binding.fragmentMainStoriesRvStories.layoutManager?.scrollToPosition(0)
         }
     }
 

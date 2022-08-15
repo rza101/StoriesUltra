@@ -7,11 +7,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import com.google.gson.Gson
 import com.rhezarijaya.storiesultra.R
+import com.rhezarijaya.storiesultra.data.network.Result
+import com.rhezarijaya.storiesultra.data.network.model.RegisterResponse
 import com.rhezarijaya.storiesultra.databinding.ActivityRegisterBinding
 import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 import com.rhezarijaya.storiesultra.util.Constants
 import com.rhezarijaya.storiesultra.ui.ViewModelFactory
+import retrofit2.HttpException
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -39,7 +43,52 @@ class RegisterActivity : AppCompatActivity() {
                     binding.registerNameField.text.toString(),
                     binding.registerEmailField.text.toString(),
                     binding.registerPasswordField.text.toString()
-                )
+                ).observe(this) { result ->
+                    if (result != null) {
+                        setLoading(result is Result.Loading)
+
+                        when (result) {
+                            is Result.Success -> {
+                                if (!result.data.error!!) {
+                                    Toast.makeText(
+                                        this,
+                                        getString(R.string.register_success),
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                    finish()
+                                } else {
+                                    Toast.makeText(
+                                        this,
+                                        result.data.message ?: getString(R.string.register_error),
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                    finish()
+                                }
+                            }
+
+                            is Result.Error -> {
+                                var message: String = getString(R.string.register_error)
+
+                                try{
+                                    Gson().fromJson(
+                                        (result.error as HttpException).response()?.errorBody()?.string(),
+                                        RegisterResponse::class.java
+                                    ).message?.let {
+                                        message = it
+                                    }
+                                }catch (e: Exception){ }
+
+                                Toast.makeText(
+                                    this@RegisterActivity,
+                                    message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
+                }
             } else {
                 Toast.makeText(
                     this@RegisterActivity,
@@ -48,27 +97,15 @@ class RegisterActivity : AppCompatActivity() {
                 ).show()
             }
         }
+    }
 
-        registerViewModel.getRegisterData().observe(this@RegisterActivity) { registerResponse ->
-            if (!(registerResponse.error as Boolean)) {
-                Toast.makeText(this, getString(R.string.register_success), Toast.LENGTH_SHORT)
-                    .show()
-                finish()
-            }
-        }
-
-        registerViewModel.getRegisterError().observe(this@RegisterActivity) { registerError ->
-            registerError.getData()?.let {
-                Toast.makeText(this@RegisterActivity, it, Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        registerViewModel.isLoading().observe(this@RegisterActivity) { isLoading: Boolean ->
-            binding.registerProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            binding.registerBtnRegister.isEnabled = !isLoading
-            binding.registerNameField.isEnabled = !isLoading
-            binding.registerEmailField.isEnabled = !isLoading
-            binding.registerPasswordField.isEnabled = !isLoading
+    private fun setLoading(isLoading: Boolean) {
+        binding.apply {
+            registerProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            registerBtnRegister.isEnabled = !isLoading
+            registerNameField.isEnabled = !isLoading
+            registerEmailField.isEnabled = !isLoading
+            registerPasswordField.isEnabled = !isLoading
         }
     }
 }

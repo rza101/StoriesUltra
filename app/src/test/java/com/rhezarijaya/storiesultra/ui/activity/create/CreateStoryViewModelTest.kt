@@ -1,32 +1,29 @@
 package com.rhezarijaya.storiesultra.ui.activity.create
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.rhezarijaya.storiesultra.DummyDataGenerator
 import com.rhezarijaya.storiesultra.MainDispatcherRule
+import com.rhezarijaya.storiesultra.data.network.AuthRepository
+import com.rhezarijaya.storiesultra.data.network.Result
+import com.rhezarijaya.storiesultra.data.network.StoryRepository
 import com.rhezarijaya.storiesultra.data.network.model.CreateStoryResponse
-import com.rhezarijaya.storiesultra.data.network.model.Story
 import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 import com.rhezarijaya.storiesultra.getOrAwaitValue
-import com.rhezarijaya.storiesultra.ui.OnSuccessCallback
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.*
-import org.mockito.internal.stubbing.answers.CallsRealMethods
+import org.mockito.Spy
 import org.mockito.junit.MockitoJUnitRunner
 import java.io.File
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class CreateStoryViewModelTest {
     @get:Rule
@@ -36,28 +33,50 @@ class CreateStoryViewModelTest {
     val mainDispatcherRules = MainDispatcherRule()
 
     @Mock
-    private lateinit var appPreferences: AppPreferences
-    private lateinit var onSuccessCallback: OnSuccessCallback<CreateStoryResponse>
+    private lateinit var authRepository: AuthRepository
+
+    @Mock
+    private lateinit var storyRepository: StoryRepository
+
+    private lateinit var createStoryViewModel: CreateStoryViewModel
 
     @Before
     fun setup() {
-        appPreferences = mock(AppPreferences::class.java)
-        onSuccessCallback = object : OnSuccessCallback<CreateStoryResponse> {
-            override fun onSuccess(message: CreateStoryResponse) {}
-        }
+        createStoryViewModel = CreateStoryViewModel(authRepository, storyRepository)
     }
 
     @Test
-    fun `when done submitting isLoading should be false`() = runBlocking {
-//        val mock = mock(CreateStoryViewModel::class.java)
-//        val submit = mock.submit(onSuccessCallback, "description", File(""), null, null)
-//
-//        assertNotNull(submit)
-//        assertTrue(!mock.isLoading().getOrAwaitValue())
+    fun `when submitting and not done yet`() = runTest {
+        val expectedData = MutableLiveData<Result<CreateStoryResponse>>()
+        expectedData.value = Result.Loading
 
-        val createStoryViewModel = CreateStoryViewModel(appPreferences)
-        val submit = createStoryViewModel.submit(onSuccessCallback, "description", File(""), null, null)
+        `when`(
+            storyRepository.submit(
+                "",
+                "",
+                File(""),
+                null,
+                null
+            )
+        ).thenReturn(expectedData)
 
-        assertNotNull(submit)
+        val actualData = createStoryViewModel.submit(
+            "",
+            "",
+            File(""),
+            null,
+            null
+        ).getOrAwaitValue()
+
+        verify(storyRepository).submit(
+            "",
+            "",
+            File(""),
+            null,
+            null
+        )
+
+        assertNotNull(actualData)
+        assertEquals(expectedData.getOrAwaitValue(), actualData)
     }
 }

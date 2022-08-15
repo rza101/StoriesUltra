@@ -22,15 +22,17 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
+import com.google.gson.Gson
 import com.rhezarijaya.storiesultra.BuildConfig
 import com.rhezarijaya.storiesultra.R
+import com.rhezarijaya.storiesultra.data.network.Result
+import com.rhezarijaya.storiesultra.data.network.model.CreateStoryResponse
 import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 import com.rhezarijaya.storiesultra.databinding.ActivityCreateStoryBinding
-import com.rhezarijaya.storiesultra.data.network.model.CreateStoryResponse
-import com.rhezarijaya.storiesultra.ui.OnSuccessCallback
 import com.rhezarijaya.storiesultra.ui.ViewModelFactory
 import com.rhezarijaya.storiesultra.ui.activity.main.MainActivity
 import com.rhezarijaya.storiesultra.util.*
+import retrofit2.HttpException
 import java.io.*
 import java.util.concurrent.TimeUnit
 
@@ -163,43 +165,61 @@ class CreateStoryActivity : AppCompatActivity() {
                 val compressed = compressImageFile(currentImageFile!!)
 
                 createStoryViewModel.submit(
-                    object : OnSuccessCallback<CreateStoryResponse> {
-                        override fun onSuccess(message: CreateStoryResponse) {
-                            Toast.makeText(
-                                this@CreateStoryActivity,
-                                message.message,
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                            setResult(MainActivity.INTENT_CREATE_STORY)
-                            finish()
-                        }
-                    },
+                    createStoryViewModel.getBearerToken().value ?: "",
                     binding.createEtDescription.text.toString(),
                     compressed,
                     currentLocation?.latitude,
                     currentLocation?.longitude
-                )
+                ).observe(this) { result ->
+                    if (result != null) {
+                        setLoading(result is Result.Loading)
+
+                        when (result) {
+                            is Result.Success -> {
+                                if (!result.data.error!!) {
+                                    Toast.makeText(
+                                        this@CreateStoryActivity,
+                                        result.data.message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    setResult(MainActivity.INTENT_CREATE_STORY)
+                                    finish()
+                                } else {
+                                    Toast.makeText(
+                                        this,
+                                        result.data.message
+                                            ?: getString(R.string.create_story_error),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                            is Result.Error -> {
+                                var message: String = getString(R.string.create_story_error)
+
+                                try{
+                                    Gson().fromJson(
+                                        (result.error as HttpException).response()?.errorBody()?.string(),
+                                        CreateStoryResponse::class.java
+                                    ).message?.let {
+                                        message = it
+                                    }
+                                }catch (e: Exception){ }
+
+                                Toast.makeText(
+                                    this@CreateStoryActivity,
+                                    message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
+                }
             } else {
-                Toast.makeText(this, "Please add the image and description", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
-
-        createStoryViewModel.isLoading().observe(this) { isLoading ->
-            binding.apply {
-                createProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-                createBtnCamera.isEnabled = !isLoading
-                createBtnGallery.isEnabled = !isLoading
-                createBtnClear.isEnabled = !isLoading
-                createEtDescription.isEnabled = !isLoading
-                createBtnSubmit.isEnabled = !isLoading
-            }
-        }
-
-        createStoryViewModel.getCreateError().observe(this) { createError ->
-            createError.getData()?.let {
-                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    getString(R.string.create_story_form_error),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -301,6 +321,17 @@ class CreateStoryActivity : AppCompatActivity() {
                 getString(R.string.location_permission_note),
                 Toast.LENGTH_SHORT
             ).show()
+        }
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        binding.apply {
+            createProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            createBtnCamera.isEnabled = !isLoading
+            createBtnGallery.isEnabled = !isLoading
+            createBtnClear.isEnabled = !isLoading
+            createEtDescription.isEnabled = !isLoading
+            createBtnSubmit.isEnabled = !isLoading
         }
     }
 

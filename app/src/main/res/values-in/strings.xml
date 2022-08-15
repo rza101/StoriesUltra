@@ -42,4 +42,7 @@
     <string name="location_permission_note">Untuk memperoleh lokasi, anda perlu memberi izin lokasi akurat</string>
     <string name="no_location">Lokasi tidak ditemukan</string>
     <string name="paging_error">Kesalahan saat mengambil data. Silahkan coba lagi</string>
+    <string name="register_error">Terjadi kesalahan saat daftar</string>
+    <string name="create_story_form_error">Silahkan pilih gambar dan masukkan deskripsi</string>
+    <string name="create_story_error">Gagal mengunggah</string>
 </resources>

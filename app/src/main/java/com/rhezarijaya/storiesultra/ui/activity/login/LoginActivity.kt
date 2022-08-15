@@ -8,15 +8,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import com.google.gson.Gson
 import com.rhezarijaya.storiesultra.R
 import com.rhezarijaya.storiesultra.databinding.ActivityLoginBinding
-import com.rhezarijaya.storiesultra.data.network.model.LoginResponse
 import com.rhezarijaya.storiesultra.ui.activity.main.MainActivity
 import com.rhezarijaya.storiesultra.ui.activity.register.RegisterActivity
 import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 import com.rhezarijaya.storiesultra.util.Constants
-import com.rhezarijaya.storiesultra.data.SingleEvent
+import com.rhezarijaya.storiesultra.data.network.Result
+import com.rhezarijaya.storiesultra.data.network.model.LoginResponse
 import com.rhezarijaya.storiesultra.ui.ViewModelFactory
+import retrofit2.HttpException
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -44,7 +46,61 @@ class LoginActivity : AppCompatActivity() {
                 loginViewModel.login(
                     binding.loginEmailField.text.toString(),
                     binding.loginPasswordField.text.toString()
-                )
+                ).observe(this) { result ->
+                    if (result != null) {
+                        setLoading(result is Result.Loading)
+
+                        when (result) {
+                            is Result.Success -> {
+                                if (!result.data.error!! && result.data.loginData != null) {
+                                    result.data.loginData.apply {
+                                        if (name != null && userId != null && token != null) {
+                                            loginViewModel.saveLoginInfo(name, userId, token)
+                                        }
+                                    }
+
+                                    Toast.makeText(
+                                        this@LoginActivity,
+                                        getString(R.string.login_success),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    startActivity(
+                                        Intent(
+                                            this@LoginActivity,
+                                            MainActivity::class.java
+                                        )
+                                    )
+                                    finish()
+                                } else {
+                                    Toast.makeText(
+                                        this@LoginActivity,
+                                        result.data.message ?: getString(R.string.login_error),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                            is Result.Error -> {
+                                var message: String = getString(R.string.create_story_error)
+
+                                try{
+                                    Gson().fromJson(
+                                        (result.error as HttpException).response()?.errorBody()?.string(),
+                                        LoginResponse::class.java
+                                    ).message?.let {
+                                        message = it
+                                    }
+                                }catch (e: Exception){ }
+
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
+                }
             } else {
                 Toast.makeText(
                     this@LoginActivity,
@@ -53,35 +109,15 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
             }
         }
+    }
 
-        loginViewModel.getLoginData().observe(this@LoginActivity) { loginData: LoginResponse ->
-            if (!(loginData.error as Boolean)) {
-                Toast.makeText(
-                    this@LoginActivity,
-                    getString(R.string.login_success),
-                    Toast.LENGTH_SHORT
-                ).show()
-                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                finish()
-            }
-        }
-
-        loginViewModel.getLoginError()
-            .observe(this@LoginActivity) { loginError: SingleEvent<String> ->
-                loginError.getData()?.let {
-                    Toast.makeText(this@LoginActivity, it, Toast.LENGTH_SHORT).show()
-                }
-            }
-
-        loginViewModel.isLoading().observe(this@LoginActivity) { isLoading: Boolean ->
-            // TODO boleh pakai binding apply agar tdk berulang
-            binding.apply {
-                loginProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-                loginBtnLogin.isEnabled = !isLoading
-                loginEmailField.isEnabled = !isLoading
-                loginPasswordField.isEnabled = !isLoading
-                loginTvRegister.visibility = if (isLoading) View.GONE else View.VISIBLE
-            }
+    private fun setLoading(isLoading: Boolean) {
+        binding.apply {
+            loginProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            loginBtnLogin.isEnabled = !isLoading
+            loginEmailField.isEnabled = !isLoading
+            loginPasswordField.isEnabled = !isLoading
+            loginTvRegister.visibility = if (isLoading) View.GONE else View.VISIBLE
         }
     }
 }

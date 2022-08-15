@@ -18,20 +18,18 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
+import com.google.gson.Gson
 import com.rhezarijaya.storiesultra.R
+import com.rhezarijaya.storiesultra.data.network.Result
 import com.rhezarijaya.storiesultra.data.network.model.StoryResponse
 import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 import com.rhezarijaya.storiesultra.databinding.FragmentMainMapsBinding
 import com.rhezarijaya.storiesultra.ui.ViewModelFactory
 import com.rhezarijaya.storiesultra.ui.activity.main.MainViewModel
 import com.rhezarijaya.storiesultra.util.Constants
-
+import retrofit2.HttpException
 
 class MainMapsFragment : Fragment(), OnMapReadyCallback {
-    companion object {
-        private const val TAG = "MainMapsFragment"
-    }
-
     private val Context.dataStore by preferencesDataStore(name = Constants.PREFERENCES_NAME)
 
     private lateinit var binding: FragmentMainMapsBinding
@@ -60,9 +58,36 @@ class MainMapsFragment : Fragment(), OnMapReadyCallback {
 
         mapView = binding.fragmentMainMapsMapview
 
-        binding.fragmentMainMapsFabRefresh.visibility = View.GONE
         binding.fragmentMainMapsFabRefresh.setOnClickListener {
-            mainViewModel.loadMapsStories(50)
+            mainViewModel.getMapsStories(mainViewModel.getBearerToken().value ?: "", 50)
+                .observe(requireActivity()) { result ->
+                    if (result != null) {
+                        setLoading(result is Result.Loading)
+
+                        when (result) {
+                            is Result.Success -> {
+                                if (!result.data.error!!) {
+                                    addMarkersAndAnimateCamera(result.data)
+                                } else {
+                                    Toast.makeText(
+                                        requireActivity(),
+                                        result.data.message ?: "Error getting data",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                }
+                            }
+                            is Result.Error -> {
+                                Toast.makeText(
+                                    requireActivity(),
+                                    result.error.localizedMessage,
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
+                        }
+                    }
+                }
         }
 
         mapView.apply {
@@ -70,21 +95,47 @@ class MainMapsFragment : Fragment(), OnMapReadyCallback {
             getMapAsync(this@MainMapsFragment)
         }
 
-        mainViewModel.getMapsStoriesData().observe(requireActivity()) { storiesData ->
-            addMarkersAndAnimateCamera(storiesData)
-        }
+        mainViewModel.getMapsStories(mainViewModel.getBearerToken().value ?: "", 50)
+            .observe(requireActivity()) { result ->
+                if (result != null) {
+                    setLoading(result is Result.Loading)
 
-        mainViewModel.getMapsStoriesError().observe(requireActivity()) { storiesError ->
-            storiesError.getData()?.let {
-                Toast.makeText(requireActivity(), it, Toast.LENGTH_SHORT).show()
+                    when (result) {
+                        is Result.Success -> {
+                            if (!result.data.error!!) {
+                                addMarkersAndAnimateCamera(result.data)
+                            } else {
+                                Toast.makeText(
+                                    requireActivity(),
+                                    result.data.message ?: "Error getting data",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
+                        }
+                        is Result.Error -> {
+                            var message: String = getString(R.string.create_story_error)
+
+                            try {
+                                Gson().fromJson(
+                                    (result.error as HttpException).response()?.errorBody()
+                                        ?.string(),
+                                    StoryResponse::class.java
+                                ).message?.let {
+                                    message = it
+                                }
+                            } catch (e: Exception) {
+                            }
+
+                            Toast.makeText(
+                                requireActivity(),
+                                message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
             }
-        }
-
-        mainViewModel.isMapsStoriesLoading().observe(requireActivity()) { isLoading ->
-            binding.fragmentMainMapsFabRefresh.isEnabled = !isLoading
-            binding.fragmentMainMapsProgressBar.visibility =
-                if (isLoading) View.VISIBLE else View.GONE
-        }
     }
 
     override fun onStart() {
@@ -140,17 +191,14 @@ class MainMapsFragment : Fragment(), OnMapReadyCallback {
             } catch (exception: Resources.NotFoundException) {
             }
         }
-
-        binding.fragmentMainMapsFabRefresh.visibility = View.VISIBLE
-        mainViewModel.loadMapsStories(50)
     }
 
     private fun addMarkersAndAnimateCamera(storiesData: StoryResponse) {
         if (context != null && this::googleMap.isInitialized) {
             val boundBuilder = LatLngBounds.builder()
 
-            storiesData.listStory?.forEach { story ->
-                story?.let {
+            storiesData.listStory.forEach { story ->
+                story.let {
                     if (it.name != null && it.lat != null && it.lon != null) {
                         val coordinate = LatLng(it.lat, it.lon)
 
@@ -192,5 +240,11 @@ class MainMapsFragment : Fragment(), OnMapReadyCallback {
                 )
             )
         }
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        binding.fragmentMainMapsFabRefresh.isEnabled = !isLoading
+        binding.fragmentMainMapsProgressBar.visibility =
+            if (isLoading) View.VISIBLE else View.GONE
     }
 }

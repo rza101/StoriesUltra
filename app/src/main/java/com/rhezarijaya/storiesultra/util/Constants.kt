@@ -4,7 +4,6 @@ object Constants {
     // API CONSTANTS
     const val API_BASE_URL: String = "https://story-api.dicoding.dev/v1/"
     const val UNEXPECTED_ERROR = "Unexpected Error"
-    const val UNEXPECTED_DATA_ERROR = "Unexpected Data Error"
 
     // INTENT KEYS
     const val INTENT_MAIN_TO_DETAIL: String = "INTENT_MAIN_TO_DETAIL"

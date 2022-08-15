@@ -19,7 +19,9 @@
     <string name="login_error">Login Error. Please try again</string>
     <string name="logout_success">Logout Success</string>
     <string name="register_success">Register Success</string>
+    <string name="register_error">Register Error</string>
 
+    <string name="paging_error">Error when fetching data. Please try again</string>
     <string name="created_at_format">Created At : %s</string>
     <string name="location_format">Location : %s</string>
     <string name="camera">Camera</string>
@@ -32,6 +34,8 @@
     <string name="camera_granted">Camera Permision has been granted. You able to upload story</string>
     <string name="camera_not_granted">Camera Permission is needed to use camera</string>
     <string name="choose_picture">Choose a Picture</string>
+    <string name="create_story_form_error">Please add the image and description</string>
+    <string name="create_story_error">Upload failed</string>
 
     <string name="transition_detail_photo" translatable="false">transition_detail_photo</string>
     <string name="transition_detail_name" translatable="false">transition_detail_name</string>
@@ -50,5 +54,4 @@
     <string name="location_permission_not_granted">Current location cannot be retrieved without location permission</string>
     <string name="location_permission_note">To get current location, you must grant precise location permission</string>
     <string name="no_location">No location</string>
-    <string name="paging_error">Error when fetching data. Please try again</string>
 </resources>
