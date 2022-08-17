@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import com.rhezarijaya.storiesultra.data.network.APIService
-import com.rhezarijaya.storiesultra.data.network.APIUtils
 import com.rhezarijaya.storiesultra.data.network.Result
 import com.rhezarijaya.storiesultra.data.network.model.LoginResponse
 import com.rhezarijaya.storiesultra.data.network.model.RegisterResponse

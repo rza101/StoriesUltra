@@ -60,7 +60,7 @@ class MainMapsFragment : Fragment(), OnMapReadyCallback {
                 ViewModelFactory(APIUtils.getAPIService(), appPreferences)
             )[MainViewModel::class.java]
 
-        var bearerToken = ""
+        var bearerToken: String
 
         runBlocking {
             bearerToken = mainViewModel.getBearerToken().asFlow().first() ?: ""

@@ -5,7 +5,6 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class Story(
-
     @field:SerializedName("photoUrl")
     val photoUrl: String? = null,
 

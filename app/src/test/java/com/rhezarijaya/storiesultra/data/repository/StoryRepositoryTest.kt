@@ -18,12 +18,10 @@ import com.rhezarijaya.storiesultra.ui.adapter.StoryListAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -31,7 +29,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
-import java.io.File
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -53,13 +50,8 @@ class StoryRepositoryTest {
     private val dummyPage: Int? = null
     private val dummySize: Int = 50
 
-    private val dummyDescription: RequestBody =
-        "description".toRequestBody("text/plain".toMediaType())
-    private val dummyFile: MultipartBody.Part = MultipartBody.Part.createFormData(
-        "photo",
-        "filename",
-        File("file").asRequestBody("image/jpeg".toMediaType())
-    )
+    private val dummyDescription: RequestBody = DummyDataGenerator.generateDummyDescription()
+    private val dummyFile: MultipartBody.Part = DummyDataGenerator.generateDummyFileMultipart()
 
     @Before
     fun setup() {

@@ -3,7 +3,6 @@ package com.rhezarijaya.storiesultra.data.network.model
 import com.google.gson.annotations.SerializedName
 
 data class LoginData(
-
     @field:SerializedName("name")
     val name: String? = null,
 

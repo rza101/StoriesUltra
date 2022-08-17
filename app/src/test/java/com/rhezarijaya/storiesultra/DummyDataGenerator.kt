@@ -1,8 +1,25 @@
 package com.rhezarijaya.storiesultra
 
 import com.rhezarijaya.storiesultra.data.network.model.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
 object DummyDataGenerator {
+    fun generateDummyBearerToken() = "bearer token"
+
+    fun generateDummyDescription() = "description".toRequestBody("text/plain".toMediaType())
+
+    fun generateDummyException() = Exception("exception")
+
+    fun generateDummyFileMultipart() = MultipartBody.Part.createFormData(
+        "photo",
+        "filename",
+        File("").asRequestBody("image/jpeg".toMediaType())
+    )
+
     fun generateDummySuccessCreateStoryResponse() =
         CreateStoryResponse(error = false, message = "Submit success")
 
@@ -19,10 +36,6 @@ object DummyDataGenerator {
 
     fun generateDummySuccessStoryResponse() =
         StoryResponse(error = false, message = "success", listStory = generateDummyStories())
-
-    fun generateDummyException() = Exception("exception")
-
-    fun generateDummyBearerToken() = "bearer token"
 
     fun generateDummyStories(): List<Story> {
         val stories: MutableList<Story> = arrayListOf()

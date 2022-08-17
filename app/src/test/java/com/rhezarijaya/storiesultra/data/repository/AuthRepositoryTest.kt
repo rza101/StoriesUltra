@@ -3,20 +3,22 @@ package com.rhezarijaya.storiesultra.data.repository
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.rhezarijaya.storiesultra.DummyDataGenerator
 import com.rhezarijaya.storiesultra.MainDispatcherRule
-import com.rhezarijaya.storiesultra.data.network.Result
 import com.rhezarijaya.storiesultra.data.network.APIService
+import com.rhezarijaya.storiesultra.data.network.Result
 import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 import com.rhezarijaya.storiesultra.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi

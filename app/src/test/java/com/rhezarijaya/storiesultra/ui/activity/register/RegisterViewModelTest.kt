@@ -4,19 +4,21 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.rhezarijaya.storiesultra.DummyDataGenerator
 import com.rhezarijaya.storiesultra.MainDispatcherRule
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import com.rhezarijaya.storiesultra.data.network.Result
 import com.rhezarijaya.storiesultra.data.network.model.RegisterResponse
 import com.rhezarijaya.storiesultra.data.repository.AuthRepository
 import com.rhezarijaya.storiesultra.getOrAwaitValue
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
@@ -46,9 +48,12 @@ class RegisterViewModelTest {
         val expectedData = MutableLiveData<Result<RegisterResponse>>()
         expectedData.value = Result.Loading
 
-        `when`(authRepository.register(dummyName, dummyEmail, dummyPassword)).thenReturn(expectedData)
+        `when`(authRepository.register(dummyName, dummyEmail, dummyPassword)).thenReturn(
+            expectedData
+        )
 
-        val actualData = registerViewModel.register(dummyName, dummyEmail, dummyPassword).getOrAwaitValue()
+        val actualData =
+            registerViewModel.register(dummyName, dummyEmail, dummyPassword).getOrAwaitValue()
 
         verify(authRepository).register(dummyName, dummyEmail, dummyPassword)
 
@@ -62,9 +67,12 @@ class RegisterViewModelTest {
         expectedData.value =
             Result.Success(DummyDataGenerator.generateDummySuccessRegisterResponse())
 
-        `when`(authRepository.register(dummyName, dummyEmail, dummyPassword)).thenReturn(expectedData)
+        `when`(authRepository.register(dummyName, dummyEmail, dummyPassword)).thenReturn(
+            expectedData
+        )
 
-        val actualData = registerViewModel.register(dummyName, dummyEmail, dummyPassword).getOrAwaitValue()
+        val actualData =
+            registerViewModel.register(dummyName, dummyEmail, dummyPassword).getOrAwaitValue()
 
         verify(authRepository).register(dummyName, dummyEmail, dummyPassword)
 
@@ -81,9 +89,12 @@ class RegisterViewModelTest {
         val expectedData = MutableLiveData<Result<RegisterResponse>>()
         expectedData.value = Result.Error(DummyDataGenerator.generateDummyException())
 
-        `when`(authRepository.register(dummyName, dummyEmail, dummyPassword)).thenReturn(expectedData)
+        `when`(authRepository.register(dummyName, dummyEmail, dummyPassword)).thenReturn(
+            expectedData
+        )
 
-        val actualData = registerViewModel.register(dummyName, dummyEmail, dummyPassword).getOrAwaitValue()
+        val actualData =
+            registerViewModel.register(dummyName, dummyEmail, dummyPassword).getOrAwaitValue()
 
         verify(authRepository).register(dummyName, dummyEmail, dummyPassword)
 

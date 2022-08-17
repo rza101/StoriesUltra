@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
@@ -34,8 +34,8 @@ import com.rhezarijaya.storiesultra.ui.activity.create.CreateStoryActivity
 import com.rhezarijaya.storiesultra.ui.activity.detail.DetailActivity
 import com.rhezarijaya.storiesultra.ui.activity.main.MainActivity
 import com.rhezarijaya.storiesultra.ui.activity.main.MainViewModel
-import com.rhezarijaya.storiesultra.ui.adapter.StoryListAdapter
 import com.rhezarijaya.storiesultra.ui.adapter.StoryFooterLoadingAdapter
+import com.rhezarijaya.storiesultra.ui.adapter.StoryListAdapter
 import com.rhezarijaya.storiesultra.util.Constants
 import com.rhezarijaya.storiesultra.util.Utils
 import kotlinx.coroutines.flow.first
@@ -128,7 +128,7 @@ class MainStoriesFragment : Fragment() {
             }
         }
 
-        var bearerToken = ""
+        var bearerToken: String
 
         runBlocking {
             bearerToken = mainViewModel.getBearerToken().asFlow().first() ?: ""
@@ -160,7 +160,7 @@ class MainStoriesFragment : Fragment() {
         }
     }
 
-    private fun refreshRecyclerView(){
+    private fun refreshRecyclerView() {
         storyListAdapter.refresh()
         setAdapter() // ada bug dimana jika data sudah fetch sampai habis, setelah refresh tdk bisa fetch lagi
     }

@@ -1,9 +1,8 @@
 package com.rhezarijaya.storiesultra.ui.activity.main
 
-import androidx.lifecycle.*
-import androidx.paging.*
-import com.rhezarijaya.storiesultra.data.network.APIUtils
-import com.rhezarijaya.storiesultra.data.network.model.Story
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.rhezarijaya.storiesultra.data.repository.AuthRepository
 import com.rhezarijaya.storiesultra.data.repository.StoryRepository
 

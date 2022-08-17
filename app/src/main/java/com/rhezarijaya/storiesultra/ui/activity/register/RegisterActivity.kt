@@ -12,10 +12,10 @@ import com.rhezarijaya.storiesultra.R
 import com.rhezarijaya.storiesultra.data.network.APIUtils
 import com.rhezarijaya.storiesultra.data.network.Result
 import com.rhezarijaya.storiesultra.data.network.model.RegisterResponse
-import com.rhezarijaya.storiesultra.databinding.ActivityRegisterBinding
 import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
-import com.rhezarijaya.storiesultra.util.Constants
+import com.rhezarijaya.storiesultra.databinding.ActivityRegisterBinding
 import com.rhezarijaya.storiesultra.ui.ViewModelFactory
+import com.rhezarijaya.storiesultra.util.Constants
 import retrofit2.HttpException
 
 class RegisterActivity : AppCompatActivity() {

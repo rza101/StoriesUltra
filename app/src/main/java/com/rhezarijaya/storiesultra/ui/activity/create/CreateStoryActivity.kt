@@ -33,7 +33,8 @@ import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 import com.rhezarijaya.storiesultra.databinding.ActivityCreateStoryBinding
 import com.rhezarijaya.storiesultra.ui.ViewModelFactory
 import com.rhezarijaya.storiesultra.ui.activity.main.MainActivity
-import com.rhezarijaya.storiesultra.util.*
+import com.rhezarijaya.storiesultra.util.Constants
+import com.rhezarijaya.storiesultra.util.Utils
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType.Companion.toMediaType
@@ -186,8 +187,10 @@ class CreateStoryActivity : AppCompatActivity() {
                         compressed.name,
                         compressed.asRequestBody("image/jpeg".toMediaType())
                     ),
-                    currentLocation?.latitude?.toString()?.toRequestBody("text/plain".toMediaType()),
-                    currentLocation?.longitude?.toString()?.toRequestBody("text/plain".toMediaType())
+                    currentLocation?.latitude?.toString()
+                        ?.toRequestBody("text/plain".toMediaType()),
+                    currentLocation?.longitude?.toString()
+                        ?.toRequestBody("text/plain".toMediaType())
                 ).observe(this) { result ->
                     if (result != null) {
                         setLoading(result is Result.Loading)

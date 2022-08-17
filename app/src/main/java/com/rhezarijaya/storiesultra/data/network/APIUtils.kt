@@ -32,16 +32,6 @@ object APIUtils {
         return result
     }
 
-    fun formatResponseCode(code: Int): String {
-        return if (code >= 500) {
-            "Server Error"
-        } else if (code >= 400) {
-            "Client Error"
-        } else {
-            Constants.UNEXPECTED_ERROR
-        }
-    }
-
     fun getAPIService(): APIService {
         return Retrofit.Builder()
             .baseUrl(Constants.API_BASE_URL)

@@ -5,9 +5,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.rhezarijaya.storiesultra.R
-import com.rhezarijaya.storiesultra.databinding.ActivityDetailBinding
-import com.rhezarijaya.storiesultra.data.network.model.Story
 import com.rhezarijaya.storiesultra.data.network.APIUtils
+import com.rhezarijaya.storiesultra.data.network.model.Story
+import com.rhezarijaya.storiesultra.databinding.ActivityDetailBinding
 import com.rhezarijaya.storiesultra.util.Constants
 
 class DetailActivity : AppCompatActivity() {

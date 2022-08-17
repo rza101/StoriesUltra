@@ -7,10 +7,10 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.preferencesDataStore
+import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 import com.rhezarijaya.storiesultra.databinding.ActivitySplashBinding
 import com.rhezarijaya.storiesultra.ui.activity.login.LoginActivity
 import com.rhezarijaya.storiesultra.ui.activity.main.MainActivity
-import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 import com.rhezarijaya.storiesultra.util.Constants
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

@@ -11,14 +11,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import com.rhezarijaya.storiesultra.R
 import com.rhezarijaya.storiesultra.data.network.APIUtils
-import com.rhezarijaya.storiesultra.databinding.ActivityLoginBinding
-import com.rhezarijaya.storiesultra.ui.activity.main.MainActivity
-import com.rhezarijaya.storiesultra.ui.activity.register.RegisterActivity
-import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
-import com.rhezarijaya.storiesultra.util.Constants
 import com.rhezarijaya.storiesultra.data.network.Result
 import com.rhezarijaya.storiesultra.data.network.model.LoginResponse
+import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
+import com.rhezarijaya.storiesultra.databinding.ActivityLoginBinding
 import com.rhezarijaya.storiesultra.ui.ViewModelFactory
+import com.rhezarijaya.storiesultra.ui.activity.main.MainActivity
+import com.rhezarijaya.storiesultra.ui.activity.register.RegisterActivity
+import com.rhezarijaya.storiesultra.util.Constants
 import retrofit2.HttpException
 
 class LoginActivity : AppCompatActivity() {
@@ -84,14 +84,16 @@ class LoginActivity : AppCompatActivity() {
                             is Result.Error -> {
                                 var message: String = getString(R.string.create_story_error)
 
-                                try{
+                                try {
                                     Gson().fromJson(
-                                        (result.error as HttpException).response()?.errorBody()?.string(),
+                                        (result.error as HttpException).response()?.errorBody()
+                                            ?.string(),
                                         LoginResponse::class.java
                                     ).message?.let {
                                         message = it
                                     }
-                                }catch (e: Exception){ }
+                                } catch (e: Exception) {
+                                }
 
                                 Toast.makeText(
                                     this@LoginActivity,

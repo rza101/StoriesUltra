@@ -1,6 +1,6 @@
 package com.rhezarijaya.storiesultra.ui.activity.login
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
 import com.rhezarijaya.storiesultra.data.repository.AuthRepository
 
 class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {

@@ -19,7 +19,7 @@ class AppPreferences private constructor(private val dataStore: DataStore<Prefer
         }
     }
 
-    suspend fun saveNamePrefs(name: String){
+    suspend fun saveNamePrefs(name: String) {
         dataStore.edit {
             it[NAME_KEY] = name
         }
@@ -31,7 +31,7 @@ class AppPreferences private constructor(private val dataStore: DataStore<Prefer
         }
     }
 
-    suspend fun saveUserIDPrefs(userId: String){
+    suspend fun saveUserIDPrefs(userId: String) {
         dataStore.edit {
             it[USERID_KEY] = userId
         }
@@ -43,13 +43,13 @@ class AppPreferences private constructor(private val dataStore: DataStore<Prefer
         }
     }
 
-    suspend fun saveTokenPrefs(token: String){
+    suspend fun saveTokenPrefs(token: String) {
         dataStore.edit {
             it[TOKEN_KEY] = token
         }
     }
 
-    suspend fun clearPrefs(){
+    suspend fun clearPrefs() {
         dataStore.edit {
             it.clear()
         }

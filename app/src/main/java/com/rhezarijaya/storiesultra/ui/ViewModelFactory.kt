@@ -3,13 +3,13 @@ package com.rhezarijaya.storiesultra.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.rhezarijaya.storiesultra.data.network.APIService
+import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 import com.rhezarijaya.storiesultra.data.repository.AuthRepository
 import com.rhezarijaya.storiesultra.data.repository.StoryRepository
 import com.rhezarijaya.storiesultra.ui.activity.create.CreateStoryViewModel
 import com.rhezarijaya.storiesultra.ui.activity.login.LoginViewModel
 import com.rhezarijaya.storiesultra.ui.activity.main.MainViewModel
 import com.rhezarijaya.storiesultra.ui.activity.register.RegisterViewModel
-import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 
 class ViewModelFactory(
     apiService: APIService,

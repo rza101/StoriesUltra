@@ -4,27 +4,25 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.rhezarijaya.storiesultra.DummyDataGenerator
 import com.rhezarijaya.storiesultra.MainDispatcherRule
-import com.rhezarijaya.storiesultra.data.repository.AuthRepository
 import com.rhezarijaya.storiesultra.data.network.Result
-import com.rhezarijaya.storiesultra.data.repository.StoryRepository
 import com.rhezarijaya.storiesultra.data.network.model.CreateStoryResponse
+import com.rhezarijaya.storiesultra.data.repository.AuthRepository
+import com.rhezarijaya.storiesultra.data.repository.StoryRepository
 import com.rhezarijaya.storiesultra.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
-import java.io.File
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -44,15 +42,8 @@ class CreateStoryViewModelTest {
     private lateinit var createStoryViewModel: CreateStoryViewModel
 
     private val dummyBearerToken: String = DummyDataGenerator.generateDummyBearerToken()
-    private val dummyDescription: RequestBody =
-        "description".toRequestBody("text/plain".toMediaType())
-    private val dummyFile: MultipartBody.Part = MultipartBody.Part.createFormData(
-        "photo",
-        null,
-        File("").asRequestBody("image/jpeg".toMediaType())
-    )
-    private val dummyLat: RequestBody? = null
-    private val dummylon: RequestBody? = null
+    private val dummyDescription: RequestBody = DummyDataGenerator.generateDummyDescription()
+    private val dummyFile: MultipartBody.Part = DummyDataGenerator.generateDummyFileMultipart()
 
     @Before
     fun setup() {
@@ -86,8 +77,8 @@ class CreateStoryViewModelTest {
                 dummyBearerToken,
                 dummyDescription,
                 dummyFile,
-                dummyLat,
-                dummylon
+                null,
+                null
             )
         ).thenReturn(expectedData)
 
@@ -95,16 +86,16 @@ class CreateStoryViewModelTest {
             dummyBearerToken,
             dummyDescription,
             dummyFile,
-            dummyLat,
-            dummylon
+            null,
+            null
         ).getOrAwaitValue()
 
         verify(storyRepository).submit(
             dummyBearerToken,
             dummyDescription,
             dummyFile,
-            dummyLat,
-            dummylon
+            null,
+            null
         )
 
         assertNotNull(actualData)
@@ -122,8 +113,8 @@ class CreateStoryViewModelTest {
                 dummyBearerToken,
                 dummyDescription,
                 dummyFile,
-                dummyLat,
-                dummylon
+                null,
+                null
             )
         ).thenReturn(expectedData)
 
@@ -131,16 +122,16 @@ class CreateStoryViewModelTest {
             dummyBearerToken,
             dummyDescription,
             dummyFile,
-            dummyLat,
-            dummylon
+            null,
+            null
         ).getOrAwaitValue()
 
         verify(storyRepository).submit(
             dummyBearerToken,
             dummyDescription,
             dummyFile,
-            dummyLat,
-            dummylon
+            null,
+            null
         )
 
         assertNotNull(actualData)
@@ -161,8 +152,8 @@ class CreateStoryViewModelTest {
                 dummyBearerToken,
                 dummyDescription,
                 dummyFile,
-                dummyLat,
-                dummylon
+                null,
+                null
             )
         ).thenReturn(expectedData)
 
@@ -170,16 +161,16 @@ class CreateStoryViewModelTest {
             dummyBearerToken,
             dummyDescription,
             dummyFile,
-            dummyLat,
-            dummylon
+            null,
+            null
         ).getOrAwaitValue()
 
         verify(storyRepository).submit(
             dummyBearerToken,
             dummyDescription,
             dummyFile,
-            dummyLat,
-            dummylon
+            null,
+            null
         )
 
         assertNotNull(actualData)

@@ -15,14 +15,10 @@ import com.rhezarijaya.storiesultra.data.network.model.Story
 import com.rhezarijaya.storiesultra.data.network.model.StoryResponse
 import com.rhezarijaya.storiesultra.ui.activity.main.Location
 import com.rhezarijaya.storiesultra.util.Constants
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import java.io.File
 
-class StoryRepository(private val apiService: APIService, ) {
+class StoryRepository(private val apiService: APIService) {
     fun getPagedStories(bearerToken: String): LiveData<PagingData<Story>> {
         // initial load size dijadikan sama karena ada data duplikat
         return Pager(
@@ -77,8 +73,11 @@ class StoryRepository(private val apiService: APIService, ) {
                 emit(
                     Result.Success(
                         apiService.postStory(
-                            authorization = APIUtils.formatBearerToken(bearerToken),
-                            description, photo, lat, lon
+                            APIUtils.formatBearerToken(bearerToken),
+                            description,
+                            photo,
+                            lat,
+                            lon
                         )
                     )
                 )

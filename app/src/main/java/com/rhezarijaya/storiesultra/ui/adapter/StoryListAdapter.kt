@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rhezarijaya.storiesultra.R
-import com.rhezarijaya.storiesultra.databinding.ItemStoryBinding
-import com.rhezarijaya.storiesultra.data.network.model.Story
 import com.rhezarijaya.storiesultra.data.network.APIUtils
+import com.rhezarijaya.storiesultra.data.network.model.Story
+import com.rhezarijaya.storiesultra.databinding.ItemStoryBinding
 import com.rhezarijaya.storiesultra.ui.OnItemClick
 
 class StoryListAdapter(private val onItemClick: OnItemClick<Story, ItemStoryBinding>) :
