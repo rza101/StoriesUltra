@@ -1,7 +1,7 @@
 package com.rhezarijaya.storiesultra.ui.activity.register
 
 import androidx.lifecycle.ViewModel
-import com.rhezarijaya.storiesultra.data.network.AuthRepository
+import com.rhezarijaya.storiesultra.data.repository.AuthRepository
 
 class RegisterViewModel(private val authRepository: AuthRepository) : ViewModel() {
     fun register(

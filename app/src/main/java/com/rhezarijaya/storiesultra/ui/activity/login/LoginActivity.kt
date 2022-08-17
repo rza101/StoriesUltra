@@ -10,6 +10,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import com.rhezarijaya.storiesultra.R
+import com.rhezarijaya.storiesultra.data.network.APIUtils
 import com.rhezarijaya.storiesultra.databinding.ActivityLoginBinding
 import com.rhezarijaya.storiesultra.ui.activity.main.MainActivity
 import com.rhezarijaya.storiesultra.ui.activity.register.RegisterActivity
@@ -34,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
         val loginViewModel =
             ViewModelProvider(
                 this@LoginActivity,
-                ViewModelFactory(appPreferences)
+                ViewModelFactory(APIUtils.getAPIService(), appPreferences)
             )[LoginViewModel::class.java]
 
         binding.loginTvRegister.setOnClickListener {

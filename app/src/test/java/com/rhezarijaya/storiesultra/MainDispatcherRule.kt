@@ -14,10 +14,12 @@ class MainDispatcherRule(
     private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
 ) : TestWatcher() {
     override fun starting(description: Description) {
+        super.starting(description)
         Dispatchers.setMain(testDispatcher)
     }
 
     override fun finished(description: Description) {
         Dispatchers.resetMain()
+        super.finished(description)
     }
 }

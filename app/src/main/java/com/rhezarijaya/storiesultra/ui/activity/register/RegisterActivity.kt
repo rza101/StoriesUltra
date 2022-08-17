@@ -9,6 +9,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import com.rhezarijaya.storiesultra.R
+import com.rhezarijaya.storiesultra.data.network.APIUtils
 import com.rhezarijaya.storiesultra.data.network.Result
 import com.rhezarijaya.storiesultra.data.network.model.RegisterResponse
 import com.rhezarijaya.storiesultra.databinding.ActivityRegisterBinding
@@ -31,7 +32,7 @@ class RegisterActivity : AppCompatActivity() {
         val registerViewModel =
             ViewModelProvider(
                 this@RegisterActivity,
-                ViewModelFactory(appPreferences)
+                ViewModelFactory(APIUtils.getAPIService(), appPreferences)
             )[RegisterViewModel::class.java]
 
         binding.registerBtnRegister.setOnClickListener {
@@ -71,14 +72,16 @@ class RegisterActivity : AppCompatActivity() {
                             is Result.Error -> {
                                 var message: String = getString(R.string.register_error)
 
-                                try{
+                                try {
                                     Gson().fromJson(
-                                        (result.error as HttpException).response()?.errorBody()?.string(),
+                                        (result.error as HttpException).response()?.errorBody()
+                                            ?.string(),
                                         RegisterResponse::class.java
                                     ).message?.let {
                                         message = it
                                     }
-                                }catch (e: Exception){ }
+                                } catch (e: Exception) {
+                                }
 
                                 Toast.makeText(
                                     this@RegisterActivity,

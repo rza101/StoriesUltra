@@ -1,16 +1,115 @@
 Skenario Testing Aplikasi Stories Ultra
+-------------------------------------------------
+Repository
+-------------------------------------------------
+1.  AuthRepository
+    a.  Ketika mengambil bearer token
+        - Memastikan data tidak bernilai null
+        - Memastikan data sama dengan data dummy
+    b.  Ketika login berhasil
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Success
+        - Memastikan data sama dengan data dummy
+    c.  Ketika login gagal
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Error
+    d.  Ketika melakukan logout
+        - Memastikan method AppPreferences.clearPerfs telah dipanggil
+    e.  Ketika register berhasil
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Success
+        - Memastikan data sama dengan data dummy
+    f.  Ketika register gagal
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Error
+    g.  Ketika menyimpan data login
+        - Memastikan method AppPreferences.saveNamePrefs telah dipanggil
+        - Memastikan method AppPreferences.saveUserIDPrefs telah dipanggil
+        - Memastikan method AppPreferences.saveTokenPrefs telah dipanggil
+
+2.  StoryRepository
+    a.  Ketika sukses mengambil data untuk menu utama
+        - Memastikan data tidak bernilai null
+        - Memastikan data sama dengan data dummy
+        - Memastikan jumlah data sama dengan jumlah data dummy
+    b.  Ketika sukses mengambil data untuk peta
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Success
+        - Memastikan data sama dengan data dummy
+    c.  Ketika gagal mengambil data untuk peta
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Error
+    b.  Ketika sukses submit
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Success
+        - Memastikan data sama dengan data dummy
+    c.  Ketika gagal submit
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Error
+
+
+
+-------------------------------------------------
+View Model
+-------------------------------------------------
 1.  CreateStoryViewModel
     a.  Ketika mengambil bearer token
         - Memastikan data tidak bernilai null
+        - Memastikan data sama dengan data dummy
     b.  Ketika melakukan submit dan belum dapat response:
+        - Memastikan data tidak bernilai null
         - Memastikan data adalah Result.Loading
-        - Memastikan data bukan Result.Success atau Result.Error
     c.  Ketika sukses submit:
-        - Memastikan isLoading bernilai false
-        - Memastikan createError bernilai null
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Success
+        - Memastikan data sama dengan data dummy
     d.  Ketika gagal submit:
-        - Memastikan isLoading bernilai true
-        - Memastikan createError tidak bernilai null
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Error
+
 2.  LoginViewModel
+    a.  Ketika melakukan login dan belum dapat response
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Loading
+    b.  Ketika login berhasil
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Success
+        - Memastikan data sama dengan data dummy
+    c.  Ketika login gagal
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Error
+    d.  Ketika menyimpan data login
+        - Memastikan method AuthRepository.saveLoginInfo telah dipanggil
+
 3.  MainViewModel
+    a.  Ketika mengambil bearer token
+        - Memastikan data tidak bernilai null
+        - Memastikan data sama dengan data dummy
+    b.  Ketika sukses mengambil data untuk menu utama
+        - Memastikan data tidak bernilai null
+        - Memastikan data sama dengan data dummy
+        - Memastikan jumlah data sama dengan jumlah data dummy
+    c.  Ketika mengambil data untuk peta dan belum dapat response
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Loading
+    d.  Ketika sukses mengambil data untuk peta
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Success
+        - Memastikan data sama dengan data dummy
+    e.  Ketika gagal mengambil data untuk peta
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Error
+    f.  Ketika melakukan logout
+        - Memastikan method AuthRepository.logout telah dipanggil
+
 4.  RegisterViewModel
+    a.  Ketika melakukan register dan belum dapat response
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Loading
+    b.  Ketika register berhasil
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Success
+        - Memastikan data sama dengan data dummy
+    c.  Ketika register gagal
+        - Memastikan data tidak bernilai null
+        - Memastikan data adalah Result.Error

@@ -2,18 +2,21 @@ package com.rhezarijaya.storiesultra.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.rhezarijaya.storiesultra.data.network.AuthRepository
-import com.rhezarijaya.storiesultra.data.network.StoryRepository
+import com.rhezarijaya.storiesultra.data.network.APIService
+import com.rhezarijaya.storiesultra.data.repository.AuthRepository
+import com.rhezarijaya.storiesultra.data.repository.StoryRepository
 import com.rhezarijaya.storiesultra.ui.activity.create.CreateStoryViewModel
 import com.rhezarijaya.storiesultra.ui.activity.login.LoginViewModel
 import com.rhezarijaya.storiesultra.ui.activity.main.MainViewModel
 import com.rhezarijaya.storiesultra.ui.activity.register.RegisterViewModel
 import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 
-class ViewModelFactory(private val appPreferences: AppPreferences) :
-    ViewModelProvider.NewInstanceFactory() {
-    private val authRepository = AuthRepository(appPreferences)
-    private val storyRepository = StoryRepository()
+class ViewModelFactory(
+    apiService: APIService,
+    appPreferences: AppPreferences
+) : ViewModelProvider.NewInstanceFactory() {
+    private val authRepository = AuthRepository(apiService, appPreferences)
+    private val storyRepository = StoryRepository(apiService)
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

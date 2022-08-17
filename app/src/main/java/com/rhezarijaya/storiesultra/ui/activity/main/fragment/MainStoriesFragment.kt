@@ -16,11 +16,13 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rhezarijaya.storiesultra.R
+import com.rhezarijaya.storiesultra.data.network.APIUtils
 import com.rhezarijaya.storiesultra.data.network.model.Story
 import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 import com.rhezarijaya.storiesultra.databinding.FragmentMainStoriesBinding
@@ -36,6 +38,8 @@ import com.rhezarijaya.storiesultra.ui.adapter.StoryListAdapter
 import com.rhezarijaya.storiesultra.ui.adapter.StoryFooterLoadingAdapter
 import com.rhezarijaya.storiesultra.util.Constants
 import com.rhezarijaya.storiesultra.util.Utils
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 class MainStoriesFragment : Fragment() {
     private val Context.dataStore by preferencesDataStore(name = Constants.PREFERENCES_NAME)
@@ -93,7 +97,7 @@ class MainStoriesFragment : Fragment() {
         mainViewModel =
             ViewModelProvider(
                 requireActivity(),
-                ViewModelFactory(appPreferences)
+                ViewModelFactory(APIUtils.getAPIService(), appPreferences)
             )[MainViewModel::class.java]
 
         setAdapter()
@@ -124,7 +128,13 @@ class MainStoriesFragment : Fragment() {
             }
         }
 
-        mainViewModel.getMainStories().observe(requireActivity()) { storyPagingData ->
+        var bearerToken = ""
+
+        runBlocking {
+            bearerToken = mainViewModel.getBearerToken().asFlow().first() ?: ""
+        }
+
+        mainViewModel.getMainStories(bearerToken).observe(requireActivity()) { storyPagingData ->
             storyListAdapter.submitData(lifecycle, storyPagingData)
             binding.fragmentMainStoriesRvStories.layoutManager?.scrollToPosition(0)
         }

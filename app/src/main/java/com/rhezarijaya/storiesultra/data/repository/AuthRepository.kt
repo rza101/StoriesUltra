@@ -1,14 +1,20 @@
-package com.rhezarijaya.storiesultra.data.network
+package com.rhezarijaya.storiesultra.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
+import com.rhezarijaya.storiesultra.data.network.APIService
+import com.rhezarijaya.storiesultra.data.network.APIUtils
+import com.rhezarijaya.storiesultra.data.network.Result
 import com.rhezarijaya.storiesultra.data.network.model.LoginResponse
 import com.rhezarijaya.storiesultra.data.network.model.RegisterResponse
 import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 import kotlinx.coroutines.runBlocking
 
-class AuthRepository(private val appPreferences: AppPreferences) {
+class AuthRepository(
+    private val apiService: APIService,
+    private val appPreferences: AppPreferences
+) {
     fun getBearerToken(): LiveData<String?> {
         return appPreferences.getTokenPrefs().asLiveData()
     }
@@ -18,7 +24,7 @@ class AuthRepository(private val appPreferences: AppPreferences) {
             emit(Result.Loading)
 
             try {
-                emit(Result.Success(APIUtils.getAPIService().login(email, password)))
+                emit(Result.Success(apiService.login(email, password)))
             } catch (exception: Exception) {
                 emit(Result.Error(exception))
             }
@@ -40,7 +46,7 @@ class AuthRepository(private val appPreferences: AppPreferences) {
             try {
                 emit(
                     Result.Success(
-                        APIUtils.getAPIService().register(name, email, password)
+                        apiService.register(name, email, password)
                     )
                 )
             } catch (exception: Exception) {

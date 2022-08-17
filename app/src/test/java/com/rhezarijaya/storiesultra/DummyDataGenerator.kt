@@ -1,16 +1,28 @@
 package com.rhezarijaya.storiesultra
 
-import com.rhezarijaya.storiesultra.data.network.model.CreateStoryResponse
-import com.rhezarijaya.storiesultra.data.network.model.Story
+import com.rhezarijaya.storiesultra.data.network.model.*
 
 object DummyDataGenerator {
-    fun generateDummySuccessCreateResponse(): CreateStoryResponse {
-        return CreateStoryResponse(error = false, message = "success")
-    }
+    fun generateDummySuccessCreateStoryResponse() =
+        CreateStoryResponse(error = false, message = "Submit success")
 
-    fun generateDummyErrorCreateResponse(): CreateStoryResponse {
-        return CreateStoryResponse(error = true, message = "error submitting")
-    }
+    fun generateDummySuccessLoginResponse() = LoginResponse(
+        error = false,
+        message = "Submit success",
+        loginData = LoginData(name = "name", userId = "123", token = "abc123")
+    )
+
+    fun generateDummySuccessRegisterResponse() = RegisterResponse(
+        error = false,
+        message = "Register success"
+    )
+
+    fun generateDummySuccessStoryResponse() =
+        StoryResponse(error = false, message = "success", listStory = generateDummyStories())
+
+    fun generateDummyException() = Exception("exception")
+
+    fun generateDummyBearerToken() = "bearer token"
 
     fun generateDummyStories(): List<Story> {
         val stories: MutableList<Story> = arrayListOf()

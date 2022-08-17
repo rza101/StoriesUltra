@@ -20,11 +20,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asFlow
 import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
 import com.google.gson.Gson
 import com.rhezarijaya.storiesultra.BuildConfig
 import com.rhezarijaya.storiesultra.R
+import com.rhezarijaya.storiesultra.data.network.APIUtils
 import com.rhezarijaya.storiesultra.data.network.Result
 import com.rhezarijaya.storiesultra.data.network.model.CreateStoryResponse
 import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
@@ -32,6 +34,12 @@ import com.rhezarijaya.storiesultra.databinding.ActivityCreateStoryBinding
 import com.rhezarijaya.storiesultra.ui.ViewModelFactory
 import com.rhezarijaya.storiesultra.ui.activity.main.MainActivity
 import com.rhezarijaya.storiesultra.util.*
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 import java.io.*
 import java.util.concurrent.TimeUnit
@@ -114,7 +122,7 @@ class CreateStoryActivity : AppCompatActivity() {
         createStoryViewModel =
             ViewModelProvider(
                 this,
-                ViewModelFactory(appPreferences)
+                ViewModelFactory(APIUtils.getAPIService(), appPreferences)
             )[CreateStoryViewModel::class.java]
 
         fusedLocationClient =
@@ -163,13 +171,23 @@ class CreateStoryActivity : AppCompatActivity() {
         binding.createBtnSubmit.setOnClickListener {
             if (currentImageFile != null && !TextUtils.isEmpty(binding.createEtDescription.text.toString())) {
                 val compressed = compressImageFile(currentImageFile!!)
+                var bearerToken: String
+
+                runBlocking {
+                    bearerToken = createStoryViewModel.getBearerToken().asFlow().first() ?: ""
+                }
 
                 createStoryViewModel.submit(
-                    createStoryViewModel.getBearerToken().value ?: "",
-                    binding.createEtDescription.text.toString(),
-                    compressed,
-                    currentLocation?.latitude,
-                    currentLocation?.longitude
+                    bearerToken,
+                    binding.createEtDescription.text.toString()
+                        .toRequestBody("text/plain".toMediaType()),
+                    MultipartBody.Part.createFormData(
+                        "photo",
+                        compressed.name,
+                        compressed.asRequestBody("image/jpeg".toMediaType())
+                    ),
+                    currentLocation?.latitude?.toString()?.toRequestBody("text/plain".toMediaType()),
+                    currentLocation?.longitude?.toString()?.toRequestBody("text/plain".toMediaType())
                 ).observe(this) { result ->
                     if (result != null) {
                         setLoading(result is Result.Loading)
@@ -196,14 +214,16 @@ class CreateStoryActivity : AppCompatActivity() {
                             is Result.Error -> {
                                 var message: String = getString(R.string.create_story_error)
 
-                                try{
+                                try {
                                     Gson().fromJson(
-                                        (result.error as HttpException).response()?.errorBody()?.string(),
+                                        (result.error as HttpException).response()?.errorBody()
+                                            ?.string(),
                                         CreateStoryResponse::class.java
                                     ).message?.let {
                                         message = it
                                     }
-                                }catch (e: Exception){ }
+                                } catch (e: Exception) {
+                                }
 
                                 Toast.makeText(
                                     this@CreateStoryActivity,

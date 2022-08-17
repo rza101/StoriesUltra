@@ -13,6 +13,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asFlow
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.gson.Gson
 import com.rhezarijaya.storiesultra.R
+import com.rhezarijaya.storiesultra.data.network.APIUtils
 import com.rhezarijaya.storiesultra.data.network.Result
 import com.rhezarijaya.storiesultra.data.network.model.StoryResponse
 import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
@@ -27,6 +29,8 @@ import com.rhezarijaya.storiesultra.databinding.FragmentMainMapsBinding
 import com.rhezarijaya.storiesultra.ui.ViewModelFactory
 import com.rhezarijaya.storiesultra.ui.activity.main.MainViewModel
 import com.rhezarijaya.storiesultra.util.Constants
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import retrofit2.HttpException
 
 class MainMapsFragment : Fragment(), OnMapReadyCallback {
@@ -53,13 +57,19 @@ class MainMapsFragment : Fragment(), OnMapReadyCallback {
         mainViewModel =
             ViewModelProvider(
                 requireActivity(),
-                ViewModelFactory(appPreferences)
+                ViewModelFactory(APIUtils.getAPIService(), appPreferences)
             )[MainViewModel::class.java]
+
+        var bearerToken = ""
+
+        runBlocking {
+            bearerToken = mainViewModel.getBearerToken().asFlow().first() ?: ""
+        }
 
         mapView = binding.fragmentMainMapsMapview
 
         binding.fragmentMainMapsFabRefresh.setOnClickListener {
-            mainViewModel.getMapsStories(mainViewModel.getBearerToken().value ?: "", 50)
+            mainViewModel.getMapsStories(bearerToken, 50)
                 .observe(requireActivity()) { result ->
                     if (result != null) {
                         setLoading(result is Result.Loading)
@@ -95,7 +105,7 @@ class MainMapsFragment : Fragment(), OnMapReadyCallback {
             getMapAsync(this@MainMapsFragment)
         }
 
-        mainViewModel.getMapsStories(mainViewModel.getBearerToken().value ?: "", 50)
+        mainViewModel.getMapsStories(bearerToken, 50)
             .observe(requireActivity()) { result ->
                 if (result != null) {
                     setLoading(result is Result.Loading)

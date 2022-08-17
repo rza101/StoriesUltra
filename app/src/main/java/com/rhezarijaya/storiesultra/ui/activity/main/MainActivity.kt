@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.rhezarijaya.storiesultra.R
+import com.rhezarijaya.storiesultra.data.network.APIService
+import com.rhezarijaya.storiesultra.data.network.APIUtils
 import com.rhezarijaya.storiesultra.data.preferences.AppPreferences
 import com.rhezarijaya.storiesultra.databinding.ActivityMainBinding
 import com.rhezarijaya.storiesultra.ui.ViewModelFactory
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         mainViewModel =
             ViewModelProvider(
                 this@MainActivity,
-                ViewModelFactory(appPreferences)
+                ViewModelFactory(APIUtils.getAPIService(), appPreferences)
             )[MainViewModel::class.java]
 
         setupWithNavController(

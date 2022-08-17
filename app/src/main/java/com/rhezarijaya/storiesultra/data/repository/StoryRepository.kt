@@ -1,4 +1,4 @@
-package com.rhezarijaya.storiesultra.data.network
+package com.rhezarijaya.storiesultra.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
@@ -6,6 +6,10 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
+import com.rhezarijaya.storiesultra.data.network.APIService
+import com.rhezarijaya.storiesultra.data.network.APIUtils
+import com.rhezarijaya.storiesultra.data.network.Result
+import com.rhezarijaya.storiesultra.data.network.StoriesPagingSource
 import com.rhezarijaya.storiesultra.data.network.model.CreateStoryResponse
 import com.rhezarijaya.storiesultra.data.network.model.Story
 import com.rhezarijaya.storiesultra.data.network.model.StoryResponse
@@ -13,11 +17,12 @@ import com.rhezarijaya.storiesultra.ui.activity.main.Location
 import com.rhezarijaya.storiesultra.util.Constants
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
-class StoryRepository {
+class StoryRepository(private val apiService: APIService, ) {
     fun getPagedStories(bearerToken: String): LiveData<PagingData<Story>> {
         // initial load size dijadikan sama karena ada data duplikat
         return Pager(
@@ -27,7 +32,7 @@ class StoryRepository {
                 initialLoadSize = Constants.STORY_PAGING_PAGE_SIZE
             ),
             pagingSourceFactory = {
-                StoriesPagingSource(APIUtils.getAPIService(), bearerToken)
+                StoriesPagingSource(apiService, bearerToken)
             }
         ).liveData
     }
@@ -44,7 +49,7 @@ class StoryRepository {
             try {
                 emit(
                     Result.Success(
-                        APIUtils.getAPIService().getStories(
+                        apiService.getStories(
                             APIUtils.formatBearerToken(bearerToken),
                             page,
                             size,
@@ -60,10 +65,10 @@ class StoryRepository {
 
     fun submit(
         bearerToken: String,
-        description: String,
-        photo: File,
-        lat: Double?,
-        lon: Double?
+        description: RequestBody,
+        photo: MultipartBody.Part,
+        lat: RequestBody?,
+        lon: RequestBody?
     ): LiveData<Result<CreateStoryResponse>> {
         return liveData {
             emit(Result.Loading)
@@ -71,16 +76,9 @@ class StoryRepository {
             try {
                 emit(
                     Result.Success(
-                        APIUtils.getAPIService().postStory(
+                        apiService.postStory(
                             authorization = APIUtils.formatBearerToken(bearerToken),
-                            description = description.toRequestBody("text/plain".toMediaType()),
-                            photo = MultipartBody.Part.createFormData(
-                                "photo",
-                                photo.name,
-                                photo.asRequestBody("image/jpeg".toMediaType())
-                            ),
-                            lat = lat?.toString()?.toRequestBody("text/plain".toMediaType()),
-                            lon = lon?.toString()?.toRequestBody("text/plain".toMediaType())
+                            description, photo, lat, lon
                         )
                     )
                 )
