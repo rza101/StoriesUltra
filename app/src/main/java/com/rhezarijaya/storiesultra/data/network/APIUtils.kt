@@ -1,5 +1,6 @@
 package com.rhezarijaya.storiesultra.data.network
 
+import com.rhezarijaya.storiesultra.BuildConfig
 import com.rhezarijaya.storiesultra.util.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -39,7 +40,11 @@ object APIUtils {
             .client(
                 OkHttpClient.Builder()
                     .addInterceptor(
-                        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+                        if(BuildConfig.DEBUG){
+                            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+                        } else {
+                            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
+                        }
                     )
                     .build()
             )

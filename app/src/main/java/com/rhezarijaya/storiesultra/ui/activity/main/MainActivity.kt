@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.rhezarijaya.storiesultra.R
 import com.rhezarijaya.storiesultra.data.network.APIUtils
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
         setupWithNavController(
             binding.mainBottomNavView,
-            findNavController(this, R.id.main_nav_host)
+            (supportFragmentManager.findFragmentById(R.id.main_nav_host) as NavHostFragment).navController
         )
     }
 

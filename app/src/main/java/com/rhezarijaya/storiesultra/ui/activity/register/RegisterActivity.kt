@@ -50,7 +50,7 @@ class RegisterActivity : AppCompatActivity() {
 
                         when (result) {
                             is Result.Success -> {
-                                if (!result.data.error!!) {
+                                if (!(result.data.error as Boolean)) {
                                     Toast.makeText(
                                         this,
                                         getString(R.string.register_success),

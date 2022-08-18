@@ -13,6 +13,7 @@ class AppPreferences private constructor(private val dataStore: DataStore<Prefer
     private val USERID_KEY = stringPreferencesKey(Constants.USERID_PREFERENCES)
     private val TOKEN_KEY = stringPreferencesKey(Constants.TOKEN_PREFERENCES)
 
+    // name and userid can be removed
     fun getNamePrefs(): Flow<String?> {
         return dataStore.data.map {
             it[NAME_KEY]

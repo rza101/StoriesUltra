@@ -25,31 +25,33 @@ class DetailActivity : AppCompatActivity() {
         val story = intent.getParcelableExtra<Story>(Constants.INTENT_MAIN_TO_DETAIL)
 
         story?.let {
-            Glide.with(this)
-                .load(story.photoUrl)
-                .placeholder(R.drawable.ic_baseline_broken_image_24)
-                .error(R.drawable.ic_baseline_broken_image_24)
-                .into(binding.detailIvPhoto)
-            binding.detailIvPhoto.contentDescription = story.description
+            binding.apply {
+                Glide.with(this@DetailActivity)
+                    .load(story.photoUrl)
+                    .placeholder(R.drawable.ic_baseline_broken_image_24)
+                    .error(R.drawable.ic_baseline_broken_image_24)
+                    .into(detailIvPhoto)
+                detailIvPhoto.contentDescription = story.description
 
-            binding.detailTvName.text = story.name
-            binding.detailTvCreatedAt.text = String.format(
-                getString(R.string.created_at_format),
-                APIUtils.formatCreatedAt(story.createdAt ?: "")
-            )
-            binding.detailTvDescription.text = story.description
-            binding.detailTvLocation.text = String.format(
-                getString(R.string.location_format),
-                if (story.lat != null && story.lon != null) {
-                    String.format(
-                        getString(R.string.coordinate_format),
-                        story.lat,
-                        story.lon
-                    )
-                } else {
-                    "-"
-                }
-            )
+                detailTvName.text = story.name
+                detailTvCreatedAt.text = String.format(
+                    getString(R.string.created_at_format),
+                    APIUtils.formatCreatedAt(story.createdAt ?: "")
+                )
+                detailTvDescription.text = story.description
+                detailTvLocation.text = String.format(
+                    getString(R.string.location_format),
+                    if (story.lat != null && story.lon != null) {
+                        String.format(
+                            getString(R.string.coordinate_format),
+                            story.lat,
+                            story.lon
+                        )
+                    } else {
+                        "-"
+                    }
+                )
+            }
         } ?: run {
             Toast.makeText(this, getString(R.string.data_invalid), Toast.LENGTH_SHORT).show()
             finish()

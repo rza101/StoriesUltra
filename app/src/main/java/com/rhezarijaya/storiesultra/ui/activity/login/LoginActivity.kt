@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
 
                         when (result) {
                             is Result.Success -> {
-                                if (!result.data.error!! && result.data.loginData != null) {
+                                if (!(result.data.error as Boolean) && result.data.loginData != null) {
                                     result.data.loginData.apply {
                                         if (name != null && userId != null && token != null) {
                                             loginViewModel.saveLoginInfo(name, userId, token)

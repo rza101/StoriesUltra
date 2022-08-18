@@ -36,6 +36,7 @@ import retrofit2.HttpException
 class MainMapsFragment : Fragment(), OnMapReadyCallback {
     private val Context.dataStore by preferencesDataStore(name = Constants.PREFERENCES_NAME)
 
+    // https://proandroiddev.com/avoiding-memory-leaks-when-using-data-binding-and-view-binding-3b91d571c150
     private lateinit var binding: FragmentMainMapsBinding
     private lateinit var mapView: MapView
 
@@ -76,15 +77,14 @@ class MainMapsFragment : Fragment(), OnMapReadyCallback {
 
                         when (result) {
                             is Result.Success -> {
-                                if (!result.data.error!!) {
+                                if (!(result.data.error as Boolean)) {
                                     addMarkersAndAnimateCamera(result.data)
                                 } else {
                                     Toast.makeText(
                                         requireActivity(),
-                                        result.data.message ?: "Error getting data",
+                                        result.data.message ?: getString(R.string.error_data),
                                         Toast.LENGTH_SHORT
-                                    )
-                                        .show()
+                                    ).show()
                                 }
                             }
                             is Result.Error -> {
@@ -112,7 +112,7 @@ class MainMapsFragment : Fragment(), OnMapReadyCallback {
 
                     when (result) {
                         is Result.Success -> {
-                            if (!result.data.error!!) {
+                            if (!(result.data.error as Boolean)) {
                                 addMarkersAndAnimateCamera(result.data)
                             } else {
                                 Toast.makeText(

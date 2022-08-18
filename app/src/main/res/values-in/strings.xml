@@ -45,4 +45,5 @@
     <string name="register_error">Terjadi kesalahan saat daftar</string>
     <string name="create_story_form_error">Silahkan pilih gambar dan masukkan deskripsi</string>
     <string name="create_story_error">Gagal mengunggah</string>
+    <string name="error_data">Gagal mendapat data</string>
 </resources>

@@ -171,7 +171,7 @@ class CreateStoryActivity : AppCompatActivity() {
 
         binding.createBtnSubmit.setOnClickListener {
             if (currentImageFile != null && !TextUtils.isEmpty(binding.createEtDescription.text.toString())) {
-                val compressed = compressImageFile(currentImageFile!!)
+                val compressed = compressImageFile(currentImageFile as File)
                 var bearerToken: String
 
                 runBlocking {
@@ -197,7 +197,7 @@ class CreateStoryActivity : AppCompatActivity() {
 
                         when (result) {
                             is Result.Success -> {
-                                if (!result.data.error!!) {
+                                if (!(result.data.error as Boolean)) {
                                     Toast.makeText(
                                         this@CreateStoryActivity,
                                         result.data.message,
